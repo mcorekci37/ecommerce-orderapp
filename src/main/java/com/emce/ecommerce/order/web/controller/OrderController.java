@@ -5,12 +5,21 @@ import com.emce.ecommerce.order.web.dto.OrderRequest;
 import com.emce.ecommerce.order.web.dto.OrderResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -21,9 +30,32 @@ public class OrderController {
   private final OrderService orderService;
 
   @PostMapping("/createOrder")
-  public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest){
+  public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
     var response = orderService.create(orderRequest);
     return ResponseEntity.ok(response);
   }
 
+  @GetMapping
+  public ResponseEntity<Page<OrderResponse>> listOrders(
+      @RequestParam Integer userId,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+      @RequestParam(defaultValue = "0") BigDecimal minAmount,
+      @RequestParam(defaultValue = "1000000") BigDecimal maxAmount,
+      Pageable pageable
+//      @RequestParam(defaultValue = "0") int page,
+//      @RequestParam(defaultValue = "10") int size,
+//      @RequestParam(defaultValue = "id") String sortBy,
+//      @RequestParam(defaultValue = "true") boolean ascending
+      ) {
+
+    // Create Pageable with sorting
+//    Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+//    Pageable pageable = PageRequest.of(page, size, sort);
+
+    // Get paginated and cached results
+    Page<OrderResponse> orders =
+        orderService.listOrders(userId, startDate, endDate, minAmount, maxAmount, pageable);
+    return ResponseEntity.ok(orders);
+  }
 }
