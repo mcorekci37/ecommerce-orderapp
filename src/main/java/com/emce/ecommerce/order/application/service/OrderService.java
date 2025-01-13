@@ -2,7 +2,9 @@ package com.emce.ecommerce.order.application.service;
 
 import com.emce.ecommerce.order.application.mapper.OrderDataMapper;
 import com.emce.ecommerce.order.domain.entity.Order;
+import com.emce.ecommerce.order.domain.exception.OrderNotFoundException;
 import com.emce.ecommerce.order.domain.repository.OrderRepository;
+import com.emce.ecommerce.order.domain.valueobjects.OrderId;
 import com.emce.ecommerce.order.web.dto.OrderRequest;
 import com.emce.ecommerce.order.web.dto.OrderResponse;
 import com.emce.ecommerce.product.domain.repository.ProductRepository;
@@ -41,7 +43,7 @@ public class OrderService {
     order.setUserId(1);
 
     Order savedOrder = orderRepository.save(order);
-    producer.publishOrder(savedOrder);
+    producer.publishCreateEvent(savedOrder);
 
     //todo payment with webhooks
 
@@ -53,5 +55,16 @@ public class OrderService {
         .findByUserIdAndDateBetweenAndTotalPriceBetween(
             userId, startDate, endDate, minAmount, maxAmount, pageable)
            .map(mapper::orderToOrderResponse);
+  }
+
+  public OrderResponse cancelOrder(String orderId) {
+    Order order = orderRepository
+            .findByOrderId(new OrderId(orderId))
+            .orElseThrow(() -> new OrderNotFoundException(orderId));
+    order.cancel();
+    Order savedOrder = orderRepository.save(order);
+    producer.publishCancelEvent(savedOrder);
+
+    return mapper.orderToOrderResponse(savedOrder);
   }
 }

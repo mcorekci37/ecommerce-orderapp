@@ -2,6 +2,7 @@ package com.emce.ecommerce.order.infrastructure.adapter;
 
 import com.emce.ecommerce.order.domain.entity.Order;
 import com.emce.ecommerce.order.domain.repository.OrderRepository;
+import com.emce.ecommerce.order.domain.valueobjects.OrderId;
 import com.emce.ecommerce.order.infrastructure.mapper.OrderEntityMapper;
 import com.emce.ecommerce.order.infrastructure.repository.OrderJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +24,11 @@ public class OrderRepositoryImpl implements OrderRepository {
   @Override
   public Order save(Order order) {
     return mapper.orderEntityToOrder(jpaRepository.save(mapper.orderToOrderEntity(order)));
+  }
+
+  @Override
+  public Optional<Order> findByOrderId(OrderId orderId) {
+    return jpaRepository.findById(orderId.getValue()).map(mapper::orderEntityToOrder);
   }
 
   @Override

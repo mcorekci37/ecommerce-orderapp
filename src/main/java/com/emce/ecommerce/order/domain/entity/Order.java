@@ -2,6 +2,7 @@ package com.emce.ecommerce.order.domain.entity;
 
 import com.emce.ecommerce.common.domain.entity.AggregateRoot;
 import com.emce.ecommerce.common.domain.valueobjects.Money;
+import com.emce.ecommerce.order.domain.exception.ShippedOrderCannotBeCancelledException;
 import com.emce.ecommerce.order.domain.valueobjects.OrderId;
 import com.emce.ecommerce.order.domain.valueobjects.OrderStatus;
 import com.emce.ecommerce.product.domain.entity.Product;
@@ -66,5 +67,16 @@ public class Order extends AggregateRoot<OrderId> {
 
   public OrderStatus getOrderStatus() {
     return orderStatus;
+  }
+
+  public void cancel() {
+    if (shipped()){
+      throw new ShippedOrderCannotBeCancelledException();
+    }
+    this.orderStatus = OrderStatus.CANCELED;
+  }
+
+  private boolean shipped() {
+    return getOrderStatus().equals(OrderStatus.SHIPPED);
   }
 }

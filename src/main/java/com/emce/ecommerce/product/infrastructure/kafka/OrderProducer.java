@@ -13,17 +13,24 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class OrderProducer {
 
-    private static final String TOPIC = "orders";
+    private static final String ORDER_CREATE_TOPIC = "order-created";
+    private static final String ORDER_CANCELED_TOPIC = "order-canceled";
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper serializer;
 
-    public void publishOrder(Order order) {
+    public void publishCreateEvent(Order order) {
+        publishEvent(ORDER_CREATE_TOPIC, order);
+    }
+    public void publishCancelEvent(Order order) {
+        publishEvent(ORDER_CANCELED_TOPIC, order);
+    }
+    public void publishEvent(String topic, Order order) {
         String orderDetails = null;
         try {
             orderDetails = serializer.writeValueAsString(order);
         } catch (JsonProcessingException e) {
             log.error("Order cannot be serialized : {}", order);
         }
-        kafkaTemplate.send(TOPIC, orderDetails);
+        kafkaTemplate.send(topic, orderDetails);
     }
 }
