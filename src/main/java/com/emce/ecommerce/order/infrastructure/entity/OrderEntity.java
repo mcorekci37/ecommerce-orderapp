@@ -1,6 +1,5 @@
 package com.emce.ecommerce.order.infrastructure.entity;
 
-import com.emce.ecommerce.common.domain.valueobjects.Money;
 import com.emce.ecommerce.order.domain.valueobjects.OrderStatus;
 import com.emce.ecommerce.product.infrastructure.entity.ProductEntity;
 import jakarta.persistence.Entity;
@@ -22,11 +21,12 @@ import java.time.LocalDateTime;
 public class OrderEntity {
     @Id
     private String id;
+    private Integer userId;
     @ManyToOne
     private ProductEntity product;
     private int quantity;
     private BigDecimal totalPrice;
-    private LocalDateTime createdAt;
+    private LocalDateTime date;
     private OrderStatus orderStatus;
 
 }

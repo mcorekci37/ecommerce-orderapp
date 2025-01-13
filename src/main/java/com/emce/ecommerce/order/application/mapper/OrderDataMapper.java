@@ -20,7 +20,7 @@ public class OrderDataMapper {
   public OrderResponse orderToOrderResponse(Order savedOrder) {
     return new OrderResponse(
             //todo user info will be added later after integration spring security
-            1,
+            savedOrder.getUserId(),
             "isim" + "soyisim",
             savedOrder.getId().getValue(),
             savedOrder.getProduct().getId().getValue(),
@@ -28,7 +28,7 @@ public class OrderDataMapper {
             savedOrder.getProduct().getPrice().amount(),
             savedOrder.getQuantity(),
             savedOrder.getTotalPrice().amount(),
-            savedOrder.getCreatedAt()
+            savedOrder.getDate()
     );
 
   }
