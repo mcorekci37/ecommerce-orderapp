@@ -14,16 +14,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
+
+  private static final String BEARER = "Bearer ";
+
   private final TokenRepository tokenRepository;
 
   @Override
   public void logout(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
     final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+    if (authHeader == null || !authHeader.startsWith(BEARER)) {
       return;
     }
-    String tokenStr = authHeader.substring(7);
+    String tokenStr = authHeader.substring(BEARER.length());
     Token token = tokenRepository.findByToken(tokenStr).orElse(null);
     if (token != null) {
       token.setExpired(true);

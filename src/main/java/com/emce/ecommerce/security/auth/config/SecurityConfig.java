@@ -4,6 +4,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 import com.emce.ecommerce.security.auth.service.LogoutService;
 import com.emce.ecommerce.security.auth.service.CustomUserDetailsService;
+import com.emce.ecommerce.security.user.domain.valueobjects.Role;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,13 +29,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+  private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**", "/api/v1/public/**"};
+  public static final String[] ADMIN_PATHS = {"/api/v1/order/ship/**", "/actuator/refresh"};
+  public static final String LOGUT_PATH = "/api/v1/auth/logout";
+
   private final CustomUserDetailsService customUserDetailsService;
   private final LogoutService logoutService;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
-  private static final String[] WHITE_LIST_URL = {
-    "/api/v1/auth/**", "/h2-console/**", "/api/v1/public/**"
-  };
-  public static final String[] ADMIN_PATHS = {"/api/v1/order/match/**"};
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -44,7 +45,7 @@ public class SecurityConfig {
                 req.requestMatchers(WHITE_LIST_URL)
                     .permitAll()
                     .requestMatchers(ADMIN_PATHS)
-                    .hasAuthority("ADMIN") // Restrict access to matchOrder endpoint
+                    .hasAuthority(Role.ADMIN.toString()) // Restrict access to matchOrder endpoint
                     .anyRequest()
                     .authenticated())
         .headers(
@@ -59,7 +60,7 @@ public class SecurityConfig {
         .logout(
             logout ->
                 logout
-                    .logoutUrl("/api/v1/auth/logout")
+                    .logoutUrl(LOGUT_PATH)
                     .addLogoutHandler(logoutService)
                     .logoutSuccessHandler(
                         (request, response, authentication) -> {

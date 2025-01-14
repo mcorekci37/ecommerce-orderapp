@@ -2,12 +2,13 @@ package com.emce.ecommerce.order.application.service;
 
 import com.emce.ecommerce.order.application.mapper.OrderDataMapper;
 import com.emce.ecommerce.order.domain.entity.Order;
-import com.emce.ecommerce.order.domain.exception.CannotCancelOtherUsersOrder;
+import com.emce.ecommerce.order.domain.exception.CannotCancelOtherUsersOrderException;
 import com.emce.ecommerce.order.domain.exception.OrderNotFoundException;
 import com.emce.ecommerce.order.domain.repository.OrderRepository;
 import com.emce.ecommerce.order.domain.valueobjects.OrderId;
 import com.emce.ecommerce.order.web.dto.OrderRequest;
 import com.emce.ecommerce.order.web.dto.OrderResponse;
+import com.emce.ecommerce.product.domain.entity.Product;
 import com.emce.ecommerce.product.domain.repository.ProductRepository;
 import com.emce.ecommerce.product.domain.valueobjects.ProductId;
 import com.emce.ecommerce.product.exception.ProductNotFoundException;
@@ -65,13 +66,19 @@ public class OrderService {
     Order order = orderRepository
             .findByOrderId(new OrderId(orderId))
             .orElseThrow(() -> new OrderNotFoundException(orderId));
+    Product productInOrder = order.getProduct();
     //todo users having admin roles should do anything
     if (!getUsername().equals(order.getUsername())){
-      throw new CannotCancelOtherUsersOrder();
+      throw new CannotCancelOtherUsersOrderException();
     }
     order.cancel();
+    productInOrder.undoStock(order.getQuantity());
+
+    //todo exception handling here
     Order savedOrder = orderRepository.save(order);
     producer.publishCancelEvent(savedOrder);
+
+    productRepository.save(productInOrder);
 
     return mapper.orderToOrderResponse(savedOrder);
   }

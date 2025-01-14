@@ -42,17 +42,7 @@ public class OrderController {
       @RequestParam(defaultValue = "0") BigDecimal minAmount,
       @RequestParam(defaultValue = "1000000") BigDecimal maxAmount,
       Pageable pageable
-//      @RequestParam(defaultValue = "0") int page,
-//      @RequestParam(defaultValue = "10") int size,
-//      @RequestParam(defaultValue = "id") String sortBy,
-//      @RequestParam(defaultValue = "true") boolean ascending
       ) {
-
-    // Create Pageable with sorting
-//    Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-//    Pageable pageable = PageRequest.of(page, size, sort);
-
-    // Get paginated and cached results
     Page<OrderResponse> orders =
         orderService.listOrders(startDate, endDate, minAmount, maxAmount, pageable);
     return ResponseEntity.ok(orders);

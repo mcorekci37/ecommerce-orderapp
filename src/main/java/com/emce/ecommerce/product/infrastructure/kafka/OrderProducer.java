@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class OrderProducer {
 
+    //todo move this to prop file
+
     private static final String ORDER_CREATE_TOPIC = "order-created";
     private static final String ORDER_CANCELED_TOPIC = "order-canceled";
     private final KafkaTemplate<String, String> kafkaTemplate;
@@ -30,6 +32,7 @@ public class OrderProducer {
             orderDetails = serializer.writeValueAsString(order);
         } catch (JsonProcessingException e) {
             log.error("Order cannot be serialized : {}", order);
+            //todo we can apply outbox pattern or dlq pattern here
         }
         kafkaTemplate.send(topic, orderDetails);
     }

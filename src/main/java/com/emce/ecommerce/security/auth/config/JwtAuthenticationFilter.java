@@ -1,10 +1,10 @@
 package com.emce.ecommerce.security.auth.config;
 
+import com.emce.ecommerce.common.domain.config.MessageConfig;
 import com.emce.ecommerce.security.auth.util.JwtUtil;
 import com.emce.ecommerce.security.token.TokenRepository;
 import com.emce.ecommerce.security.auth.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,17 +18,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import static com.emce.ecommerce.common.domain.config.MessageConstants.*;
+
 @Configuration
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-  public static final String ERROR_AUTHENTICATION_FAILED_MSG = "Error: Authentication failed.";
-  public static final String ERROR_USER_NOT_FOUND_MSG =
-      "Error: User not found. JWT token is invalid.";
 
   public static final String WHITE_LIST = "/api/v1/auth";
+  public static final String BEARER = "Bearer ";
+
   private final JwtUtil jwtUtil;
   private final CustomUserDetailsService customUserDetailsService;
   private final TokenRepository tokenRepository;
+  private final MessageConfig messageConfig;
 
   @Override
   protected void doFilterInternal(
@@ -42,11 +44,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       }
       String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
       final String userEmail;
-      if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      if (authHeader == null || !authHeader.startsWith(BEARER)) {
         filterChain.doFilter(request, response);
         return;
       }
-      String jwt = authHeader.substring(7);
+      String jwt = authHeader.substring(BEARER.length());
       userEmail = jwtUtil.extractUsername(jwt);
       if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(userEmail);
@@ -63,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           SecurityContextHolder.getContext().setAuthentication(authToken);
         } else {
           response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-          response.getWriter().write(ERROR_AUTHENTICATION_FAILED_MSG);
+          response.getWriter().write(messageConfig.getMessage(MSG_AUTHENTICATION_FAILED));
           response.getWriter().flush();
         }
       }
@@ -72,12 +74,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     } catch (UsernameNotFoundException e) {
       // Handle UsernameNotFoundException when user associated with JWT is deleted
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.getWriter().write(ERROR_USER_NOT_FOUND_MSG);
+      response.getWriter().write(messageConfig.getMessage(MSG_USER_NOT_FOUND));
       response.getWriter().flush();
     } catch (Exception e) {
       // Catch other exceptions if necessary
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.getWriter().write(ERROR_AUTHENTICATION_FAILED_MSG);
+      response.getWriter().write(messageConfig.getMessage(MSG_AUTHENTICATION_FAILED));
       response.getWriter().flush();
     }
   }

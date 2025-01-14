@@ -15,10 +15,6 @@ public class Category extends BaseEntity<CategoryId> {
     setId(new CategoryId(id));
   }
 
-  public Category(Integer id) {
-    setId(new CategoryId(id));
-  }
-
   public String getName() {
     return name;
   }

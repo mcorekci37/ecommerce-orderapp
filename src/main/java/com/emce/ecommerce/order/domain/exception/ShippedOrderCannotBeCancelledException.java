@@ -1,11 +1,15 @@
 package com.emce.ecommerce.order.domain.exception;
 
 public class ShippedOrderCannotBeCancelledException extends OrderDomainException {
-  public ShippedOrderCannotBeCancelledException(String message) {
-    super(message);
+
+  private final String orderId;
+
+
+  public ShippedOrderCannotBeCancelledException(String orderId) {
+    this.orderId = orderId;
   }
 
-  public ShippedOrderCannotBeCancelledException() {
-    this("Order with id is already shipped. It cannot be cancelled.");
+  public String getOrderId() {
+    return orderId;
   }
 }

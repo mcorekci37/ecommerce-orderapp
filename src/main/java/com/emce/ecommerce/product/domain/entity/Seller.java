@@ -7,8 +7,4 @@ public class Seller extends BaseEntity<SellerId> {
     public Seller(SellerId sellerId) {
         setId(sellerId);
     }
-    public Seller(Integer id) {
-        this(new SellerId(id));
-    }
-
 }

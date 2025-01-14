@@ -20,7 +20,6 @@ public class OrderDataMapper {
 
   public OrderResponse orderToOrderResponse(Order savedOrder) {
     return new OrderResponse(
-            //todo user info will be added later after integration spring security
             savedOrder.getUsername(),
             savedOrder.getId().getValue(),
             savedOrder.getProduct().getId().getValue(),

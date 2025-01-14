@@ -16,9 +16,6 @@ public class Order extends AggregateRoot<OrderId> {
   private Product product;
   private int quantity;
   private Money totalPrice;
-  //    private Money price;
-  //    private Money finalPrice;
-  //    private Integer appliedPromotionId;
   private LocalDateTime date;
   private OrderStatus orderStatus;
 
@@ -68,7 +65,7 @@ public class Order extends AggregateRoot<OrderId> {
 
   public void cancel() {
     if (shipped()){
-      throw new ShippedOrderCannotBeCancelledException();
+      throw new ShippedOrderCannotBeCancelledException(getId().getValue());
     }
     this.orderStatus = OrderStatus.CANCELED;
   }

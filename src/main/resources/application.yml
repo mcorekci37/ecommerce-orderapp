@@ -20,10 +20,10 @@ spring:
   messages:
     basename: messages
     encoding: UTF-8
-#  mvc:
-#    locale: tr
-    #    locale: en_US
-#    locale-resolver: fixed
+  mvc:
+    locale: tr
+#    locale: en
+    locale-resolver: fixed
 
   kafka:
     bootstrap-servers: localhost:9092
@@ -42,8 +42,8 @@ application:
       secret-key: DEFINESOMESECRETKEYTOSINGTOKENFORSECURINGAPPLICATIONWITHJWTTOKEN
       expiration: 86400000 # 1 day
 
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: refresh,health
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health
