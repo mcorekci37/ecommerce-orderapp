@@ -8,8 +8,9 @@ spring:
     password: 123456
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    show-sql: false
+#      ddl-auto: create-drop
+      ddl-auto: update
+    show-sql: true
   cache:
     type: simple
 #    type: redis
@@ -33,6 +34,13 @@ spring:
 
 server:
   port: 8080
+
+
+application:
+  security:
+    jwt:
+      secret-key: DEFINESOMESECRETKEYTOSINGTOKENFORSECURINGAPPLICATIONWITHJWTTOKEN
+      expiration: 86400000 # 1 day
 
 #management:
 #  endpoints:

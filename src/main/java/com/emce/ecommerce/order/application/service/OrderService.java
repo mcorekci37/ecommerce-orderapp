@@ -2,6 +2,7 @@ package com.emce.ecommerce.order.application.service;
 
 import com.emce.ecommerce.order.application.mapper.OrderDataMapper;
 import com.emce.ecommerce.order.domain.entity.Order;
+import com.emce.ecommerce.order.domain.exception.CannotCancelOtherUsersOrder;
 import com.emce.ecommerce.order.domain.exception.OrderNotFoundException;
 import com.emce.ecommerce.order.domain.repository.OrderRepository;
 import com.emce.ecommerce.order.domain.valueobjects.OrderId;
@@ -21,10 +22,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import static com.emce.ecommerce.security.auth.util.AuthUtil.getUsername;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class OrderService {
 
   private final ProductRepository productRepository;
@@ -34,13 +36,14 @@ public class OrderService {
 
   @CacheEvict(value = "orders", allEntries = true)
   public OrderResponse create(OrderRequest orderRequest) {
+    //todo apply some validation logics such as quantity check etc.
+
     var productRequested =
         productRepository
             .findByProductId(new ProductId(orderRequest.productId()))
             .orElseThrow(() -> new ProductNotFoundException(orderRequest.productId()));
     productRequested.consumeStock(orderRequest.quantity());
-    Order order = mapper.orderRequestToOrder(orderRequest, productRequested);
-    order.setUserId(1);
+    Order order = mapper.orderRequestToOrder(orderRequest, productRequested, getUsername());
 
     Order savedOrder = orderRepository.save(order);
     producer.publishCreateEvent(savedOrder);
@@ -49,11 +52,12 @@ public class OrderService {
 
     return mapper.orderToOrderResponse(savedOrder);
   }
+
   @Cacheable(value = "orders", key = "#userId + ':' + #startDate + ':' + #endDate + ':' + #minAmount + ':' + #maxAmount + ':' + #pageable.pageNumber + ':' + #pageable.sort.toString()")
-  public Page<OrderResponse> listOrders(Integer userId, LocalDateTime startDate, LocalDateTime endDate, BigDecimal minAmount, BigDecimal maxAmount, Pageable pageable) {
+  public Page<OrderResponse> listOrders(LocalDateTime startDate, LocalDateTime endDate, BigDecimal minAmount, BigDecimal maxAmount, Pageable pageable) {
     return orderRepository
-        .findByUserIdAndDateBetweenAndTotalPriceBetween(
-            userId, startDate, endDate, minAmount, maxAmount, pageable)
+        .findByUsernameAndDateBetweenAndTotalPriceBetween(
+            getUsername(), startDate, endDate, minAmount, maxAmount, pageable)
            .map(mapper::orderToOrderResponse);
   }
 
@@ -61,6 +65,10 @@ public class OrderService {
     Order order = orderRepository
             .findByOrderId(new OrderId(orderId))
             .orElseThrow(() -> new OrderNotFoundException(orderId));
+    //todo users having admin roles should do anything
+    if (!getUsername().equals(order.getUsername())){
+      throw new CannotCancelOtherUsersOrder();
+    }
     order.cancel();
     Order savedOrder = orderRepository.save(order);
     producer.publishCancelEvent(savedOrder);

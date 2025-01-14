@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderDataMapper {
 
-  public Order orderRequestToOrder(OrderRequest orderRequest, Product product) {
+  public Order orderRequestToOrder(OrderRequest orderRequest, Product product, String username) {
     return new Order(
+            username,
             product,
             orderRequest.quantity(),
             new Money(orderRequest.totalAmount()));
@@ -20,8 +21,7 @@ public class OrderDataMapper {
   public OrderResponse orderToOrderResponse(Order savedOrder) {
     return new OrderResponse(
             //todo user info will be added later after integration spring security
-            savedOrder.getUserId(),
-            "isim" + "soyisim",
+            savedOrder.getUsername(),
             savedOrder.getId().getValue(),
             savedOrder.getProduct().getId().getValue(),
             savedOrder.getProduct().getName(),

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class Order extends AggregateRoot<OrderId> {
 
-  private Integer userId;
+  private String username;
   private Product product;
   private int quantity;
   private Money totalPrice;
@@ -22,7 +22,8 @@ public class Order extends AggregateRoot<OrderId> {
   private LocalDateTime date;
   private OrderStatus orderStatus;
 
-  public Order(Product product, Integer quantity, Money totalPrice) {
+  public Order(String username, Product product, Integer quantity, Money totalPrice) {
+    this.username = username;
     this.product = product;
     this.quantity = quantity;
     this.totalPrice = totalPrice;
@@ -31,9 +32,9 @@ public class Order extends AggregateRoot<OrderId> {
     this.setId(new OrderId(UUID.randomUUID().toString()));
   }
 
-  public Order(OrderId orderId, Integer userId, Product product, int quantity, Money totalPrice, LocalDateTime date, OrderStatus orderStatus) {
+  public Order(OrderId orderId, String username, Product product, int quantity, Money totalPrice, LocalDateTime date, OrderStatus orderStatus) {
     setId(orderId);
-    this.userId = userId;
+    this.username = username;
     this.product = product;
     this.quantity = quantity;
     this.totalPrice = totalPrice;
@@ -41,12 +42,8 @@ public class Order extends AggregateRoot<OrderId> {
     this.orderStatus = orderStatus;
   }
 
-  public Integer getUserId() {
-    return userId;
-  }
-
-  public void setUserId(Integer userId) {
-    this.userId = userId;
+  public String getUsername() {
+    return username;
   }
 
   public Product getProduct() {

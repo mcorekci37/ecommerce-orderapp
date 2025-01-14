@@ -1,13 +1,11 @@
 package com.emce.ecommerce.order.web.dto;
 
-import com.emce.ecommerce.common.domain.valueobjects.Money;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record OrderResponse(
-        Integer userId,
-        String userDetails,
+        String username,
         String orderId,
         Integer productId,
         String productName,

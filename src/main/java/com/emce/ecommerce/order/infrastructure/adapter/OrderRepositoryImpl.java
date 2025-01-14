@@ -32,8 +32,8 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public Page<Order> findByUserIdAndDateBetweenAndTotalPriceBetween(Integer userId, LocalDateTime startDate, LocalDateTime endDate, BigDecimal minAmount, BigDecimal maxAmount, Pageable pageable) {
-    return jpaRepository.findByUserIdAndDateBetweenAndTotalPriceBetween(userId, startDate, endDate, minAmount, maxAmount, pageable)
+  public Page<Order> findByUsernameAndDateBetweenAndTotalPriceBetween(String username, LocalDateTime startDate, LocalDateTime endDate, BigDecimal minAmount, BigDecimal maxAmount, Pageable pageable) {
+    return jpaRepository.findByUsernameAndDateBetweenAndTotalPriceBetween(username, startDate, endDate, minAmount, maxAmount, pageable)
             .map(mapper::orderEntityToOrder);
   }
 }

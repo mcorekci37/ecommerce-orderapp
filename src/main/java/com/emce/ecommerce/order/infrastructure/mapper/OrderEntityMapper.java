@@ -17,7 +17,7 @@ public class OrderEntityMapper {
   public Order orderEntityToOrder(OrderEntity entity) {
     return new Order(
         new OrderId(entity.getId()),
-        entity.getUserId(),
+        entity.getUsername(),
         productEntityMapper.productEntityToProduct(entity.getProduct()),
         entity.getQuantity(),
         new Money(entity.getTotalPrice()),
@@ -28,7 +28,7 @@ public class OrderEntityMapper {
   public OrderEntity orderToOrderEntity(Order order) {
     return new OrderEntity(
         order.getId().getValue(),
-        order.getUserId(),
+        order.getUsername(),
         productEntityMapper.productToProductEntity(order.getProduct()),
         order.getQuantity(),
         order.getTotalPrice().amount(),

@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface OrderRepository {
     Order save(Order order);
     Optional<Order> findByOrderId(OrderId orderId);
-    Page<Order> findByUserIdAndDateBetweenAndTotalPriceBetween(Integer userId,
+    Page<Order> findByUsernameAndDateBetweenAndTotalPriceBetween(String username,
                                                                LocalDateTime startDate,
                                                                LocalDateTime endDate,
                                                                BigDecimal minAmount,

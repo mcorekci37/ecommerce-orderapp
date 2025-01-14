@@ -37,7 +37,6 @@ public class OrderController {
 
   @GetMapping
   public ResponseEntity<Page<OrderResponse>> listOrders(
-      @RequestParam Integer userId,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
       @RequestParam(defaultValue = "0") BigDecimal minAmount,
@@ -55,7 +54,7 @@ public class OrderController {
 
     // Get paginated and cached results
     Page<OrderResponse> orders =
-        orderService.listOrders(userId, startDate, endDate, minAmount, maxAmount, pageable);
+        orderService.listOrders(startDate, endDate, minAmount, maxAmount, pageable);
     return ResponseEntity.ok(orders);
   }
 

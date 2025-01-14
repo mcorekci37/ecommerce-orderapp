@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class OrderEntity {
     @Id
     private String id;
-    private Integer userId;
+    private String username;
     @ManyToOne
     private ProductEntity product;
     private int quantity;
