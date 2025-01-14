@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface OrderJpaRepository extends JpaRepository<OrderEntity, String> {
-    Page<OrderEntity> findByUsernameAndDateBetweenAndTotalPriceBetween(
+    Page<OrderEntity> findByUsernameAndCreatedAtBetweenAndTotalPriceBetween(
             String username,
             LocalDateTime startDate,
             LocalDateTime endDate,

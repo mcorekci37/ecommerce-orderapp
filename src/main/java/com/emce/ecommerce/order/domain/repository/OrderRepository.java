@@ -12,10 +12,10 @@ import java.util.Optional;
 public interface OrderRepository {
     Order save(Order order);
     Optional<Order> findByOrderId(OrderId orderId);
-    Page<Order> findByUsernameAndDateBetweenAndTotalPriceBetween(String username,
-                                                               LocalDateTime startDate,
-                                                               LocalDateTime endDate,
-                                                               BigDecimal minAmount,
-                                                               BigDecimal maxAmount,
-                                                               Pageable pageable);
+    Page<Order> findByUsernameAndCreatedAtBetweenAndTotalPriceBetween(String username,
+                                                                      LocalDateTime startDate,
+                                                                      LocalDateTime endDate,
+                                                                      BigDecimal minAmount,
+                                                                      BigDecimal maxAmount,
+                                                                      Pageable pageable);
 }

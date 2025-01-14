@@ -21,7 +21,8 @@ public class OrderEntityMapper {
         productEntityMapper.productEntityToProduct(entity.getProduct()),
         entity.getQuantity(),
         new Money(entity.getTotalPrice()),
-        entity.getDate(),
+        entity.getCreatedAt(),
+        entity.getUpdatedAt(),
         entity.getOrderStatus());
   }
 
@@ -32,7 +33,6 @@ public class OrderEntityMapper {
         productEntityMapper.productToProductEntity(order.getProduct()),
         order.getQuantity(),
         order.getTotalPrice().amount(),
-        order.getDate(),
         order.getOrderStatus());
   }
 }

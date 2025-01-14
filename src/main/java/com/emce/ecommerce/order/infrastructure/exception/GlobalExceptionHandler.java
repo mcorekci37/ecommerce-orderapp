@@ -4,6 +4,8 @@ import com.emce.ecommerce.common.domain.config.MessageConfig;
 import com.emce.ecommerce.order.domain.exception.CannotCancelOtherUsersOrderException;
 import com.emce.ecommerce.order.domain.exception.OrderDomainException;
 import com.emce.ecommerce.order.domain.exception.OrderNotFoundException;
+import com.emce.ecommerce.order.domain.exception.OrderPriceExceededException;
+import com.emce.ecommerce.order.domain.exception.OrderQuantityExceededException;
 import com.emce.ecommerce.order.domain.exception.ShippedOrderCannotBeCancelledException;
 import com.emce.ecommerce.product.exception.OutOfStockException;
 import com.emce.ecommerce.product.exception.ProductDomainException;
@@ -71,6 +73,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ShippedOrderCannotBeCancelledException.class)
     public ResponseEntity<Object> handleShippedOrderCannotBeCancelledException(ShippedOrderCannotBeCancelledException ex) {
         return new ResponseEntity<>(messageConfig.getMessage(MSG_SHIPPED_ORDER_CANNOT_BE_CANCELLED, ex.getOrderId()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OrderQuantityExceededException.class)
+    public ResponseEntity<Object> handleOrderQuantityExceededException(OrderQuantityExceededException ex) {
+        return new ResponseEntity<>(messageConfig.getMessage(MSG_ORDER_QUANTITY_EXCEEDED,
+                ex.getRequestedQuantity(),ex.getMaxAllowedQuantity()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OrderPriceExceededException.class)
+    public ResponseEntity<Object> handleOrderPriceExceededException(OrderPriceExceededException ex) {
+        return new ResponseEntity<>(messageConfig.getMessage(MSG_ORDER_PRICE_EXCEEDED,
+                ex.getRequestedPrice(),ex.getMaxAllowedPrice()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadCredentialsException.class)

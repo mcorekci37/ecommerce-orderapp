@@ -16,7 +16,8 @@ public class Order extends AggregateRoot<OrderId> {
   private Product product;
   private int quantity;
   private Money totalPrice;
-  private LocalDateTime date;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
   private OrderStatus orderStatus;
 
   public Order(String username, Product product, Integer quantity, Money totalPrice) {
@@ -24,18 +25,19 @@ public class Order extends AggregateRoot<OrderId> {
     this.product = product;
     this.quantity = quantity;
     this.totalPrice = totalPrice;
-    this.date = LocalDateTime.now();
     this.orderStatus = OrderStatus.CREATED;
     this.setId(new OrderId(UUID.randomUUID().toString()));
+    this.product.consumeStock(quantity);
   }
 
-  public Order(OrderId orderId, String username, Product product, int quantity, Money totalPrice, LocalDateTime date, OrderStatus orderStatus) {
+  public Order(OrderId orderId, String username, Product product, int quantity, Money totalPrice, LocalDateTime createdAt, LocalDateTime updatedAt, OrderStatus orderStatus) {
     setId(orderId);
     this.username = username;
     this.product = product;
     this.quantity = quantity;
     this.totalPrice = totalPrice;
-    this.date = date;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
     this.orderStatus = orderStatus;
   }
 
@@ -55,8 +57,12 @@ public class Order extends AggregateRoot<OrderId> {
     return totalPrice;
   }
 
-  public LocalDateTime getDate() {
-    return date;
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
   }
 
   public OrderStatus getOrderStatus() {

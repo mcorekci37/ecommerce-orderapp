@@ -10,6 +10,8 @@ public class MessageConstants {
     public static final String MSG_CANNOT_CANCEL_OTHER_USERS_ORDER = "MSG_CANNOT_CANCEL_OTHER_USERS_ORDER";
     public static final String MSG_ORDER_NOT_FOUND = "MSG_ORDER_NOT_FOUND";
     public static final String MSG_SHIPPED_ORDER_CANNOT_BE_CANCELLED = "MSG_SHIPPED_ORDER_CANNOT_BE_CANCELLED";
+    public static final String MSG_ORDER_QUANTITY_EXCEEDED = "MSG_ORDER_QUANTITY_EXCEEDED";
+    public static final String MSG_ORDER_PRICE_EXCEEDED = "MSG_ORDER_PRICE_EXCEEDED";
     public static final String MSG_TOKEN_NOT_VALID = "MSG_TOKEN_NOT_VALID";
     public static final String MSG_TOKEN_EXPIRED = "MSG_TOKEN_EXPIRED";
     public static final String MSG_ERR_COULD_NOT_SAVE_CUSTOMER = "MSG_ERR_COULD_NOT_SAVE_CUSTOMER";

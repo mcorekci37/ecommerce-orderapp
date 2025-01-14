@@ -27,7 +27,8 @@ public class OrderDataMapper {
             savedOrder.getProduct().getPrice().amount(),
             savedOrder.getQuantity(),
             savedOrder.getTotalPrice().amount(),
-            savedOrder.getDate(),
+            savedOrder.getCreatedAt(),
+            savedOrder.getUpdatedAt(),
             savedOrder.getOrderStatus().toString()
     );
 

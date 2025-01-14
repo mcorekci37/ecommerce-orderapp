@@ -1,10 +1,11 @@
-package com.emce.ecommerce.product.infrastructure.kafka;
+package com.emce.ecommerce.order.infrastructure.kafka;
 
 import com.emce.ecommerce.order.domain.entity.Order;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class OrderProducer {
 
-    //todo move this to prop file
+    @Value("${application.kafka.topics.order-creation:order-created}")
+    private String ORDER_CREATE_TOPIC;
 
-    private static final String ORDER_CREATE_TOPIC = "order-created";
-    private static final String ORDER_CANCELED_TOPIC = "order-canceled";
+    @Value("${application.kafka.topics.order-cancellation:order-cancelled}")
+    private String ORDER_CANCELED_TOPIC;
+
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper serializer;
 
@@ -36,7 +39,7 @@ public class OrderProducer {
             orderDetails = serializer.writeValueAsString(order);
         } catch (JsonProcessingException e) {
             log.error("Order cannot be serialized : {}", order);
-            //todo we can apply outbox pattern or dlq pattern here
+            //todo we can apply outbox pattern or DLQ pattern here
         }
         kafkaTemplate.send(topic, orderDetails);
     }
