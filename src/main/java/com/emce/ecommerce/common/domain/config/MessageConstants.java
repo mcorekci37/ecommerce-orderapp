@@ -12,5 +12,9 @@ public class MessageConstants {
     public static final String MSG_SHIPPED_ORDER_CANNOT_BE_CANCELLED = "MSG_SHIPPED_ORDER_CANNOT_BE_CANCELLED";
     public static final String MSG_TOKEN_NOT_VALID = "MSG_TOKEN_NOT_VALID";
     public static final String MSG_TOKEN_EXPIRED = "MSG_TOKEN_EXPIRED";
+    public static final String MSG_ERR_COULD_NOT_SAVE_CUSTOMER = "MSG_ERR_COULD_NOT_SAVE_CUSTOMER";
+    public static final String MSG_ERR_COULD_NOT_SAVE_TOKEN = "MSG_ERR_COULD_NOT_SAVE_TOKEN";
+    public static final String MSG_ERR_COULD_NOT_SAVE_ORDER = "MSG_ERR_COULD_NOT_SAVE_ORDER";
+    public static final String MSG_ERR_COULD_NOT_SAVE_PRODUCT = "MSG_ERR_COULD_NOT_SAVE_PRODUCT";
 
 }

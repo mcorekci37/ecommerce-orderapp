@@ -8,8 +8,9 @@ import com.emce.ecommerce.order.domain.exception.ShippedOrderCannotBeCancelledEx
 import com.emce.ecommerce.product.exception.OutOfStockException;
 import com.emce.ecommerce.product.exception.ProductDomainException;
 import com.emce.ecommerce.product.exception.ProductNotFoundException;
+import com.emce.ecommerce.security.user.domain.exception.CustomerDomainException;
 import com.emce.ecommerce.security.user.domain.exception.DuplicateEmailException;
-import com.emce.ecommerce.security.user.domain.exception.UserNotFoundException;
+import com.emce.ecommerce.security.user.domain.exception.CustomerNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,8 +48,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(messageConfig.getMessage(MSG_PRODUCT_NOT_FOUND, ex.getProductId()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(CustomerNotFoundException ex) {
         return new ResponseEntity<>(messageConfig.getMessage(MSG_USERNAME_NOT_FOUND, ex.getUsername()), HttpStatus.BAD_REQUEST);
     }
 
@@ -84,6 +85,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductDomainException.class)
     public ResponseEntity<Object> handleProductDomainException(ProductDomainException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomerDomainException.class)
+    public ResponseEntity<Object> handleCustomerDomainException(CustomerDomainException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

@@ -1,6 +1,6 @@
 package com.emce.ecommerce.security.user.domain.exception;
 
-public class DuplicateEmailException extends RuntimeException {
+public class DuplicateEmailException extends CustomerDomainException {
 
     private final String email;
 

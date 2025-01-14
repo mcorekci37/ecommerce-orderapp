@@ -68,6 +68,7 @@ public class Order extends AggregateRoot<OrderId> {
       throw new ShippedOrderCannotBeCancelledException(getId().getValue());
     }
     this.orderStatus = OrderStatus.CANCELED;
+    this.getProduct().undoStock(quantity);
   }
 
   private boolean shipped() {

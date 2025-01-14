@@ -21,10 +21,14 @@ public class OrderProducer {
     private final ObjectMapper serializer;
 
     public void publishCreateEvent(Order order) {
+        log.info("Order creation will be published for product {} and user {}", order.getProduct(), order.getUsername());
         publishEvent(ORDER_CREATE_TOPIC, order);
+        log.info("Order creation is published for product {} and user {}", order.getProduct(), order.getUsername());
     }
     public void publishCancelEvent(Order order) {
+        log.info("Order cancellation will be published for product {} and user {}", order.getProduct(), order.getUsername());
         publishEvent(ORDER_CANCELED_TOPIC, order);
+        log.info("Order cancellation is published for product {} and user {}", order.getProduct(), order.getUsername());
     }
     public void publishEvent(String topic, Order order) {
         String orderDetails = null;

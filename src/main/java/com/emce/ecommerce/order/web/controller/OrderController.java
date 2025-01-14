@@ -1,6 +1,6 @@
 package com.emce.ecommerce.order.web.controller;
 
-import com.emce.ecommerce.order.application.service.OrderService;
+import com.emce.ecommerce.order.application.service.OrderApplicationService;
 import com.emce.ecommerce.order.web.dto.OrderRequest;
 import com.emce.ecommerce.order.web.dto.OrderResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +27,13 @@ import java.time.LocalDateTime;
 @RequestMapping("api/v1/order")
 public class OrderController {
 
-  private final OrderService orderService;
+  private final OrderApplicationService orderApplicationService;
 
   @PostMapping("/createOrder")
   public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
-    var response = orderService.create(orderRequest);
+    log.info("Order creation request came for product {}", orderRequest.productId());
+    var response = orderApplicationService.create(orderRequest);
+    log.info("Order creation request completed for product {}", orderRequest.productId());
     return ResponseEntity.ok(response);
   }
 
@@ -43,13 +45,18 @@ public class OrderController {
       @RequestParam(defaultValue = "1000000") BigDecimal maxAmount,
       Pageable pageable
       ) {
+    log.info("Order listing request came.");
     Page<OrderResponse> orders =
-        orderService.listOrders(startDate, endDate, minAmount, maxAmount, pageable);
+        orderApplicationService.listOrders(startDate, endDate, minAmount, maxAmount, pageable);
+    log.info("Order listing request completed.");
     return ResponseEntity.ok(orders);
   }
 
   @DeleteMapping("/cancel/{orderNumber}")
   public ResponseEntity<OrderResponse> cancelOrder(@PathVariable String orderNumber) {
-    return ResponseEntity.ok(orderService.cancelOrder(orderNumber));
+    log.info("Order cancellation request came for order {}.", orderNumber);
+    OrderResponse response = orderApplicationService.cancelOrder(orderNumber);
+    log.info("Order cancellation request completed for order {}.", orderNumber);
+    return ResponseEntity.ok(response);
   }
 }
