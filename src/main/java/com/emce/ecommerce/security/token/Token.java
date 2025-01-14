@@ -1,6 +1,6 @@
 package com.emce.ecommerce.security.token;
 
-import com.emce.ecommerce.security.user.infrastructure.entity.CustomerEntity;
+import com.emce.ecommerce.security.customer.infrastructure.entity.CustomerEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -8,9 +8,9 @@ import com.emce.ecommerce.order.domain.exception.ShippedOrderCannotBeCancelledEx
 import com.emce.ecommerce.product.exception.OutOfStockException;
 import com.emce.ecommerce.product.exception.ProductDomainException;
 import com.emce.ecommerce.product.exception.ProductNotFoundException;
-import com.emce.ecommerce.security.user.domain.exception.CustomerDomainException;
-import com.emce.ecommerce.security.user.domain.exception.DuplicateEmailException;
-import com.emce.ecommerce.security.user.domain.exception.CustomerNotFoundException;
+import com.emce.ecommerce.security.customer.domain.exception.CustomerDomainException;
+import com.emce.ecommerce.security.customer.domain.exception.DuplicateEmailException;
+import com.emce.ecommerce.security.customer.domain.exception.CustomerNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

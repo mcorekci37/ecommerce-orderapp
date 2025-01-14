@@ -14,7 +14,7 @@ import com.emce.ecommerce.product.domain.repository.ProductRepository;
 import com.emce.ecommerce.product.domain.valueobjects.ProductId;
 import com.emce.ecommerce.product.exception.ProductNotFoundException;
 import com.emce.ecommerce.product.infrastructure.kafka.OrderProducer;
-import com.emce.ecommerce.security.user.domain.exception.CustomerDomainException;
+import com.emce.ecommerce.security.customer.domain.exception.CustomerDomainException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;

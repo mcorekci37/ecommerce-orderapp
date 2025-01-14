@@ -1,6 +1,6 @@
 package com.emce.ecommerce.security.auth.util;
 
-import com.emce.ecommerce.security.user.infrastructure.entity.CustomerEntity;
+import com.emce.ecommerce.security.customer.infrastructure.entity.CustomerEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuthUtil {

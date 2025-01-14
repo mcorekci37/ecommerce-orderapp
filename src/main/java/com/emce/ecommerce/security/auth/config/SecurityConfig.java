@@ -4,7 +4,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 import com.emce.ecommerce.security.auth.service.LogoutService;
 import com.emce.ecommerce.security.auth.service.CustomUserDetailsService;
-import com.emce.ecommerce.security.user.domain.valueobjects.Role;
+import com.emce.ecommerce.security.customer.domain.valueobjects.Role;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

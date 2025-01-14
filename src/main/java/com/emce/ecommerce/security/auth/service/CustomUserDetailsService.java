@@ -1,9 +1,9 @@
 package com.emce.ecommerce.security.auth.service;
 
-import com.emce.ecommerce.security.user.domain.exception.CustomerNotFoundException;
-import com.emce.ecommerce.security.user.domain.repository.CustomerRepository;
-import com.emce.ecommerce.security.user.infrastructure.entity.CustomerEntity;
-import com.emce.ecommerce.security.user.infrastructure.mapper.CustomerEntityMapper;
+import com.emce.ecommerce.security.customer.domain.exception.CustomerNotFoundException;
+import com.emce.ecommerce.security.customer.domain.repository.CustomerRepository;
+import com.emce.ecommerce.security.customer.infrastructure.entity.CustomerEntity;
+import com.emce.ecommerce.security.customer.infrastructure.mapper.CustomerEntityMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
