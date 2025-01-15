@@ -24,7 +24,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 		servers = @Server(
 				url = "http://localhost:8080",
 				description = "E-commerce Order API URL"
-
 		),
 		security = @SecurityRequirement(name = "Authorization")
 )

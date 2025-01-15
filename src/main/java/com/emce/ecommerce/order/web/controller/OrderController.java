@@ -8,7 +8,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,13 +46,24 @@ public class OrderController {
   @GetMapping
   @Operation(summary = "List orders for applied filters", description = "List all orders of logged in user with filters and pagination")
   public ResponseEntity<Page<OrderResponse>> listOrders(
-      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
       @RequestParam(defaultValue = "0") BigDecimal minAmount,
       @RequestParam(defaultValue = "1000000") BigDecimal maxAmount,
-      Pageable pageable
-      ) {
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "id,asc") String[] sort
+  ) {
     log.info("Order listing request came.");
+    if (startDate == null) {
+      startDate = LocalDateTime.now().minusDays(7);
+    }
+    if (endDate == null) {
+      endDate = LocalDateTime.now();
+    }
+
+    Pageable pageable = getPageable(page, size, sort);
+
     Page<OrderResponse> orders =
         orderApplicationService.listOrders(startDate, endDate, minAmount, maxAmount, pageable);
     log.info("Order listing request completed.");
@@ -65,4 +78,11 @@ public class OrderController {
     log.info("Order cancellation request completed for order {}.", orderNumber);
     return ResponseEntity.ok(response);
   }
+
+  private static Pageable getPageable(int page, int size, String[] sort) {
+    Sort.Direction direction = Sort.Direction.fromString(sort[1]);
+    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+    return pageable;
+  }
+
 }
