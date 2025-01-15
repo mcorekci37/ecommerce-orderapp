@@ -3,6 +3,8 @@ package com.emce.ecommerce.order.web.controller;
 import com.emce.ecommerce.order.application.service.OrderApplicationService;
 import com.emce.ecommerce.order.web.dto.OrderRequest;
 import com.emce.ecommerce.order.web.dto.OrderResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,11 +27,13 @@ import java.time.LocalDateTime;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/order")
+@Tag(name = "Order Management", description = "APIs for managing orders")
 public class OrderController {
 
   private final OrderApplicationService orderApplicationService;
 
   @PostMapping("/createOrder")
+  @Operation(summary = "Create a new order", description = "Creates a new order for a product for a logged in user")
   public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
     log.info("Order creation request came for product {}", orderRequest.productId());
     var response = orderApplicationService.create(orderRequest);
@@ -38,6 +42,7 @@ public class OrderController {
   }
 
   @GetMapping
+  @Operation(summary = "List orders for applied filters", description = "List all orders of logged in user with filters and pagination")
   public ResponseEntity<Page<OrderResponse>> listOrders(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
@@ -53,6 +58,7 @@ public class OrderController {
   }
 
   @DeleteMapping("/cancel/{orderNumber}")
+  @Operation(summary = "Cancels an order", description = "Cancels an order for a logged in user if not shipped")
   public ResponseEntity<OrderResponse> cancelOrder(@PathVariable String orderNumber) {
     log.info("Order cancellation request came for order {}.", orderNumber);
     OrderResponse response = orderApplicationService.cancelOrder(orderNumber);
