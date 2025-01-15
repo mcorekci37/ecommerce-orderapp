@@ -67,7 +67,7 @@ public class OrderApplicationService {
   }
 
   @Cacheable(value = "orders",
-      key = "#userId + ':' + #startDate + ':' + #endDate + ':' + #minAmount + ':' + #maxAmount + ':' + #pageable.pageNumber + ':' + #pageable.sort.toString()")
+      key = "#startDate + ':' + #endDate + ':' + #minAmount + ':' + #maxAmount + ':' + #pageable.pageNumber + ':' + #pageable.sort.toString()")
   public Page<OrderResponse> listOrders(LocalDateTime startDate, LocalDateTime endDate,
       BigDecimal minAmount, BigDecimal maxAmount, Pageable pageable) {
     String username = getUsername();

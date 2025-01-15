@@ -18,7 +18,11 @@ spring:
     show-sql: true
 
   cache:
-    type: simple
+#    type: simple
+    type: redis
+  redis:
+    host: redis
+    port: 6379
   messages:
     basename: messages
     encoding: UTF-8
