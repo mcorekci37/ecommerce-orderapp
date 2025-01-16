@@ -28,13 +28,16 @@ import java.time.LocalDateTime;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/order")
+@RequestMapping(OrderController.API_BASE_PATH)
 @Tag(name = "Order Management", description = "APIs for managing orders")
 public class OrderController {
 
+  public static final String API_BASE_PATH = "/api/v1/order";
+  public static final String CREATE_ORDER_PATH = "/createOrder";
+  public static final String CANCEL_PATH = "/cancel";
   private final OrderApplicationService orderApplicationService;
 
-  @PostMapping("/createOrder")
+  @PostMapping(CREATE_ORDER_PATH)
   @Operation(summary = "Create a new order", description = "Creates a new order for a product for a logged in user")
   public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
     log.info("Order creation request came for product {}", orderRequest.productId());
@@ -70,7 +73,7 @@ public class OrderController {
     return ResponseEntity.ok(orders);
   }
 
-  @DeleteMapping("/cancel/{orderNumber}")
+  @DeleteMapping(CANCEL_PATH +"/{orderNumber}")
   @Operation(summary = "Cancels an order", description = "Cancels an order for a logged in user if not shipped")
   public ResponseEntity<OrderResponse> cancelOrder(@PathVariable String orderNumber) {
     log.info("Order cancellation request came for order {}.", orderNumber);
