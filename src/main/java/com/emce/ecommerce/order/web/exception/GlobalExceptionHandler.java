@@ -1,4 +1,4 @@
-package com.emce.ecommerce.order.infrastructure.exception;
+package com.emce.ecommerce.order.web.exception;
 
 import com.emce.ecommerce.common.domain.config.MessageConfig;
 import com.emce.ecommerce.order.domain.exception.CannotCancelOtherUsersOrderException;

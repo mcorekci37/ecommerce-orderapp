@@ -19,7 +19,7 @@ public class JwtUtil {
     @Value("${application.security.jwt.secret-key}")
     public String SECRET;
     @Value("${application.security.jwt.expiration}")
-    private long jwtExpiration;
+    public long jwtExpiration;
 
 
     public String extractUsername(String token) {
@@ -51,7 +51,7 @@ public class JwtUtil {
         return (usernameFromToken.equals(username)) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
@@ -59,7 +59,7 @@ public class JwtUtil {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
